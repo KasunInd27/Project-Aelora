@@ -1,11 +1,16 @@
-/*import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'*/
+import Navigation from "./components/Navigation/Navigation";
+import HeroSection from "./components/HeroSection/HeroSection";
+import SolarEnergyProduction from "./components/SolarEnergyProduction";
 
 function App() {
   return (
-    <main></main>
+    <>
+      <Navigation />
+      <main>
+        <HeroSection />
+        <SolarEnergyProduction />
+      </main>
+    </> 
   );
 }
 
