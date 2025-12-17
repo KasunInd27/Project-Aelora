@@ -30,6 +30,7 @@ const EnergyProductionCard = (props) => {
 
   const handleClick = () => {
     setIsSelected(!isSelected);
+    // console.log(isSelected);
     // setNum(num + 5);
     // setNum((n) => n + 1);
     // setNum(42);
