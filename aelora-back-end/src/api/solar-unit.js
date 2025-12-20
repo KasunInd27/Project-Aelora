@@ -13,3 +13,4 @@ solarUnitRoutes.route("/").get(getAllSolarUnits).post(createSolarUnit);
 solarUnitRoutes.route("/:id").get(getSolarUnitById).put(updateSolarUnit).delete(deleteSolarUnit);
 
 export default solarUnitRoutes;
+
