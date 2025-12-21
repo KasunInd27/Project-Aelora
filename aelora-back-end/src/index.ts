@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import express from "express";
-import solarUnitRoutes from './api/solar-unit.js';
-import energyGenerationRecordRouter from './api/energy-generation-record.js';
-import { connectDB } from './infrastructure/db.js';
+import solarUnitRoutes from './api/solar-unit';
+import energyGenerationRecordRouter from './api/energy-generation-record';
+import { connectDB } from './infrastructure/db';
 
 const server = express();
 server.use(express.json());

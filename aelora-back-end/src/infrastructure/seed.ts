@@ -3,11 +3,11 @@ Write the script using mongoose. It should clear any existing data in the db bef
 Generation is every 2 hours in timestamp*/
 
 import mongoose from "mongoose";
-import { SolarUnit } from "./entities/SolarUnit.js";
-import { EnergyGenerationRecord } from "./entities/EnergyGenerationRecord.js";
+import { SolarUnit } from "./entities/SolarUnit";
+import { EnergyGenerationRecord } from "./entities/EnergyGenerationRecord";
 
 import dotenv from "dotenv";
-import { connectDB } from "./db.js";
+import { connectDB } from "./db";
 
 dotenv.config();
 
