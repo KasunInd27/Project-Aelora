@@ -1,3 +1,4 @@
+import { CreateSolarUnitDto } from "../domain/dtos/solar-unit";
 import { SolarUnit } from "../infrastructure/entities/SolarUnit";
 import { Request, Response } from "express";
 
@@ -13,14 +14,21 @@ export const getAllSolarUnits = async (req: Request, res: Response) => {
 
 export const createSolarUnit = async (req: Request, res: Response) => {
     try {
-        const { serialNumber, installationDate, capacity, status } = req.body;
+        const result= CreateSolarUnitDto.safeParse(req.body);
+        if (!result.success) {
+            return res.status(400).json({ message: "Invalid data", errors: result.error.message });
+        }
 
-    const newSolarUnit = {
-        serialNumber,
-        installationDate,
-        capacity,
-        status,
-    };
+        //TODO: Implement protection with actual auth handlers
+        const userId = "test_user_123";
+
+        const newSolarUnit = {
+            serialNumber: result.data.serialNumber,
+            installationDate: new Date(result.data.installationDate),
+            capacity: result.data.capacity,
+            status: result.data.status,
+            userId: result.data.userId,
+        };
 
     const createdSolarUnit = await SolarUnit.create(newSolarUnit);
     res.status(201).json(createdSolarUnit);

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 //import { energyGenerationRecordSchema } from "./EnergyGenerationRecord.js";
 
 const solarUnitSchema = new mongoose.Schema({
-    UserId: { 
+    userId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
         required: true,

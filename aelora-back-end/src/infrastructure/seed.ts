@@ -1,11 +1,12 @@
 /*Add a solar unit and link 10 associated sequesntial energy generation records to it. 
 Write the script using mongoose. It should clear any existing data in the db before adding the new data. 
-Generation is every 2 hours in timestamp*/
+Generation is every 2 hours in timestamp
+Update to add 1 user and link them with the solar unit as well*/
 
 import mongoose from "mongoose";
 import { SolarUnit } from "./entities/SolarUnit";
 import { EnergyGenerationRecord } from "./entities/EnergyGenerationRecord";
-
+import { User } from "./entities/User";
 import dotenv from "dotenv";
 import { connectDB } from "./db";
 
@@ -19,13 +20,17 @@ async function seed() {
     // Clear existing data
     await EnergyGenerationRecord.deleteMany({});
     await SolarUnit.deleteMany({});
-    
+    await User.deleteMany({});
 
-    
+    // Create a new user
+    const user = await User.create({
+      name: "Alice Example",
+      email: "alice@example.com",
+    });
 
     // Create a new solar unit linked to the user
     const solarUnit = await SolarUnit.create({
-      
+      userId: user._id,
       serialNumber: "SU-0001",
       installationDate: new Date("2025-12-19"),
       capacity: 5000,
