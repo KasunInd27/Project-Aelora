@@ -1,4 +1,5 @@
 import { CreateSolarUnitDto } from "../domain/dtos/solar-unit";
+import { UpdateSolarUnitDto } from "../domain/dtos/solar-unit";
 import { SolarUnit } from "../infrastructure/entities/SolarUnit";
 import { Request, Response } from "express";
 
@@ -53,23 +54,40 @@ export const getSolarUnitById = async (req: Request, res: Response) => {
 };
 
 export const updateSolarUnit = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const {serialNumber, installationDate, capacity, status } = req.body;
-    const solarUnit = await SolarUnit.findById(id);
+    try {
+        const { id } = req.params;
 
-    if (!solarUnit) {
-        return res.status(404).json({ message: "Solar Unit not found" });
+        const result = UpdateSolarUnitDto.safeParse(req.body);
+        if (!result.success) {
+            return res.status(400).json({
+                message: "Invalid data",
+                errors: result.error.flatten(),
+            });
+        }
+
+        const updatedData = {
+            ...result.data,
+            ...(result.data.installationDate && {
+                installationDate: new Date(result.data.installationDate),
+            }),
+        };
+
+        const updatedSolarUnit = await SolarUnit.findByIdAndUpdate(
+            id,
+            updatedData,
+            { new: true }
+        );
+
+        if (!updatedSolarUnit) {
+            return res.status(404).json({ message: "Solar Unit not found" });
+        }
+
+        res.status(200).json(updatedSolarUnit);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating solar unit", error });
     }
-
-    const updatedSolarUnit = await SolarUnit.findByIdAndUpdate(id, { 
-        serialNumber, 
-        installationDate, 
-        capacity, 
-        status 
-    },);
-
-    res.status(200).json(updatedSolarUnit);
 };
+
 
 export const deleteSolarUnit = async (req: Request, res: Response) => {
     try {
