@@ -1,5 +1,5 @@
-import HeroSection from "@/components/HeroSection/HeroSection";
-import SolarEnergyProduction from "@/components/SolarEnergyProduction";
+import HeroSection from "./components/HeroSection";
+import SolarEnergyProduction from "./components/SolarEnergyProduction";
 
 const HomePage = () => {
   return (
