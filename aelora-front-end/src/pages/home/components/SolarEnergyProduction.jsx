@@ -1,6 +1,7 @@
 import EnergyProductionCards from "./EnergyProductionCards";
 import Tab from "./Tab";
 import { useSelector } from "react-redux";
+import { useGetEnergyGenerationRecordsBySolarUnitQuery } from "@/lib/redux/query";
 
 const SolarEnergyProduction = () => {
   const energyProductionData = [
@@ -36,7 +37,15 @@ const SolarEnergyProduction = () => {
     }
   });
 
+  // Fetch data using RTK Query
+  const { data, isLoading, isError, error } =
+    useGetEnergyGenerationRecordsBySolarUnitQuery("68e28831fe732ccfcd426e71");
+
+  console.log(data, isLoading);  // Log the data and loading state
+
+
   // console.log(filteredEnergyProductionData);
+  
 
   return (
     <section className="px-12 font-[Inter] py-6">
@@ -51,6 +60,9 @@ const SolarEnergyProduction = () => {
           );
         })}
       </div>
+      {/* <div className="mt-4">
+        <Button onClick={handleGetData}>Get Data</Button>
+      </div> */}
       <EnergyProductionCards
         energyProductionData={filteredEnergyProductionData}
       />
