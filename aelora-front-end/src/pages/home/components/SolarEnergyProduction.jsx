@@ -1,6 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { getEnergyGenerationRecordsBySolarUnit } from "@/lib/api/energy-generation-record";
+import { useSelector } from "react-redux";
 import EnergyProductionCards from "./EnergyProductionCards";
 import Tab from "./Tab";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
+import { subDays, toDate, format } from "date-fns";
 import { useGetEnergyGenerationRecordsBySolarUnitQuery } from "@/lib/redux/query";
 
 const SolarEnergyProduction = () => {
@@ -21,7 +26,6 @@ const SolarEnergyProduction = () => {
 
   const selectedTab = useSelector((state) => state.ui.selectedHomeTab);
 
-
   // const filteredEnergyProductionData =
   // selectedTab === "all"
   //   ? energyProductionData
@@ -29,7 +33,30 @@ const SolarEnergyProduction = () => {
   //   ? energyProductionData.filter((el) => el.hasAnomaly)
   //   : [];
 
-  const filteredEnergyProductionData = energyProductionData.filter((el) => {
+  const { data, isLoading, isError, error } =
+    useGetEnergyGenerationRecordsBySolarUnitQuery({
+      id: "68ebc456189fc937242ec221",
+      groupBy: "date",
+    });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data || isError) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const newEnergyProductionData = data.slice(0, 7).map((el) => {
+    return {
+      day: format(toDate(el._id.date), "EEE"),
+      date: format(toDate(el._id.date), "MMM d"),
+      production: el.totalEnergy,
+      hasAnomaly: false,
+    };
+  });
+
+  const filteredEnergyProductionData = newEnergyProductionData.filter((el) => {
     if (selectedTab === "all") {
       return true;
     } else if (selectedTab === "anomaly") {
@@ -37,15 +64,7 @@ const SolarEnergyProduction = () => {
     }
   });
 
-  // Fetch data using RTK Query
-  const { data, isLoading, isError, error } =
-    useGetEnergyGenerationRecordsBySolarUnitQuery("68e28831fe732ccfcd426e71");
-
-  console.log(data, isLoading);  // Log the data and loading state
-
-
-  // console.log(filteredEnergyProductionData);
-  
+  console.log(filteredEnergyProductionData);
 
   return (
     <section className="px-12 font-[Inter] py-6">
@@ -55,14 +74,9 @@ const SolarEnergyProduction = () => {
       </div>
       <div className="mt-4 flex items-center gap-x-4">
         {tabs.map((tab) => {
-          return (
-            <Tab key={tab.value} tab={tab} />
-          );
+          return <Tab key={tab.value} tab={tab} />;
         })}
       </div>
-      {/* <div className="mt-4">
-        <Button onClick={handleGetData}>Get Data</Button>
-      </div> */}
       <EnergyProductionCards
         energyProductionData={filteredEnergyProductionData}
       />
